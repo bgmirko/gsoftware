@@ -20,9 +20,12 @@ const styles = theme => ({
         padding: theme.spacing.unit * 4,
         outline: 'none',
     },
-    addTaskButton: {
-        marginTop: '30px'
-    },
+    // actionButton: {
+    //     marginTop: '30px',
+    //     marginLeft: '6px',
+    //     marginRight: '6px',
+    //     width: '140px'
+    // },
     fields: {
         display: 'flex',
         flexDirection: 'column',
@@ -50,17 +53,12 @@ const styles = theme => ({
 class AddTaskForm extends Component {
 
     state = {
-        open: false,
         jobTitle: '',
         jobDescription: '',
     };
 
-    handleOpen = () => {
-        this.setState({ open: true });
-    };
-
     handleClose = () => {
-        this.setState({ open: false });
+        this.props.onModalStateChanged();
     };
 
     onTextInputChange = (event) => {
@@ -73,19 +71,19 @@ class AddTaskForm extends Component {
         event.preventDefault();
         const { jobTitle, jobDescription } = this.state;
         this.props.onSaveNewTask(jobTitle, jobDescription);
-        this.setState({open: false});
+        this.props.onModalStateChanged();
     }
 
     render() {
 
-        const { classes } = this.props;
+        const { classes, modalOpen } = this.props;
 
         return (
             <React.Fragment>
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                    open={this.state.open}
+                    open={modalOpen}
                     onClose={this.handleClose}>
                     <div className={classes.paper}>
                         <form method='POST' className={classes.form} onSubmit={this.onAddTaskSubmit}>
@@ -118,23 +116,23 @@ class AddTaskForm extends Component {
                         </form>
                     </div>
                 </Modal>
-                <Button variant="contained"
-                    color="primary"
-                    onClick={this.handleOpen}
-                    className={classes.addTaskButton}
-                >
-                    Add Task
-                </Button>
             </React.Fragment>
         )
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        modalOpen: state.task.modalOpen
+    };
+}
+
 const mapDispatchToProps = dispatch => ({
-    onSaveNewTask: (jobTitle, jobDescription) => dispatch(actions.saveNewTask(jobTitle, jobDescription))
+    onSaveNewTask: (jobTitle, jobDescription) => dispatch(actions.saveNewTask(jobTitle, jobDescription)),
+    onModalStateChanged: () => dispatch(actions.modalStateChanged())
 });
 
 export default compose(
     withStyles(styles),
-    connect(null, mapDispatchToProps)
+    connect(mapStateToProps, mapDispatchToProps)
  )(AddTaskForm)

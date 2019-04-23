@@ -2,5 +2,8 @@ export {
     saveNewTask,
     fetchAllTasks,
     fetchAllTasksSuccess,
-    fetchAllTasksFail
+    fetchAllTasksFail,
+    deleteTasks,
+    tableRowClicked,
+    modalStateChanged
 } from './task';

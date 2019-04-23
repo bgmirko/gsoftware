@@ -13,6 +13,7 @@ export function* fetchAllTasksSaga(action){
         for (let key in response.data){
             fetshedAllTasks.push({
                 ...response.data[key],
+                selected: false,
                 dbId: key
             });
         }
@@ -44,5 +45,20 @@ export function* saveNewTaskSaga(action) {
     } catch (error) {
         console.log(error);
     }
+}
+
+export function* deleteTasksSaga(action){
+ 
+    for(let data of action.ids){
+        try {
+            yield axios({
+                method: 'delete',
+                url: `https://qsoftware-task.firebaseio.com/task/${data}.json`
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    yield put(actions.fetchAllTasks());
 }
 

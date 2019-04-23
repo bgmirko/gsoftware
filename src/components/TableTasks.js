@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import * as actions from '../store/actions/index';
 
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from '@material-ui/core';
 
@@ -14,31 +17,32 @@ const styles = theme => ({
     table: {
         minWidth: 700,
     },
+    tableRowSelected: {
+        backgroundColor: "#ffe6cc !important"
+    }
 });
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-    id += 1;
-    return { id, name, calories, fat, carbs, protein };
-}
 
 
 class TableTasks extends Component {
 
     state = {
         page: 0,
-        rowsPerPage: 5,
+        rowsPerPage: 5
     }
 
     handleChangePage = (event, page) => {
         this.setState({ page: page });
     }
 
-    // handleChangeRowsPerPage = () => {
-
-    // }
+    handleRowClick = (event) => {
+        const id = event.target.parentElement.childNodes[0].firstChild.data
+        this.props.onTableRowClicked(id)
+    }
 
     render() {
+
+        const { classes } = this.props;
 
         let rows = [];
         let tasksLength = 0;
@@ -47,7 +51,10 @@ class TableTasks extends Component {
             tasksLength = this.props.tasks.length;
             rows = this.props.tasks.slice((page * rowsPerPage), (page * rowsPerPage) + rowsPerPage).map(el => {
                 return (
-                    <TableRow key={el.dbId}>
+                    <TableRow
+                        key={el.dbId}
+                        onClick={this.handleRowClick}
+                        className={el.selected ? classes.tableRowSelected : null}>
                         <TableCell component="th">{el.id}</TableCell>
                         <TableCell align="left">{el.jobTitle}</TableCell>
                         <TableCell align="left">{el.jobDescription}</TableCell>
@@ -57,7 +64,7 @@ class TableTasks extends Component {
             })
         }
 
-        const { classes } = this.props;
+
 
         return (
             <Paper className={classes.root}>
@@ -77,11 +84,9 @@ class TableTasks extends Component {
                 <TablePagination
                     component="div"
                     count={tasksLength}
-
                     rowsPerPage={this.state.rowsPerPage}
                     page={this.state.page}
                     onChangePage={this.handleChangePage}
-                    //onChangeRowsPerPage={handleChangeRowsPerPage}
                     rowsPerPageOptions={[2]}
                 />
 
@@ -97,4 +102,13 @@ TableTasks.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TableTasks);
+//export default withStyles(styles)(TableTasks);
+
+const mapDispatchToProps = dispatch => ({
+    onTableRowClicked: (id) => dispatch(actions.tableRowClicked(id))
+});
+
+export default compose(
+    withStyles(styles),
+    connect(null, mapDispatchToProps)
+ )(TableTasks)

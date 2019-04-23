@@ -26,3 +26,23 @@ export const fetchAllTasksFail = () => {
         type: actionTypes.FETCH_ALL_TASKS_FAIL
     }
 }
+
+export const deleteTasks = (ids) => {
+    return{
+        type: actionTypes.DELETE_TASKS,
+        ids: ids
+    }
+}
+
+export const tableRowClicked = (id) => {
+    return{
+        type: actionTypes.TABLE_ROW_CLICKED,
+        id: id
+    }
+}
+
+export const modalStateChanged = () => {
+    return{
+        type: actionTypes.MODAL_STATE_CHANGED
+    }
+}
