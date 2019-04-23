@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import classNames from 'classnames';
 import Modal from '@material-ui/core/Modal';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import { Button, TextField } from '@material-ui/core';
+import * as actions from '../store/actions/index';
 
 
 const styles = theme => ({
@@ -18,18 +22,38 @@ const styles = theme => ({
     },
     addTaskButton: {
         marginTop: '30px'
+    },
+    fields: {
+        display: 'flex',
+        flexDirection: 'column',
+        
+        textAlign: 'center',
+        margin: '0 auto',
+        marginTop: 10,
+        width: '80%'
+    },
+    formElement: {
+        margin: 0,
+        width: '100%'
+    },
+    textArea: {
+        fontSize: '14px',
+        lineHeight: '22px'
+    },
+    button: {
+        marginTop: '15px',
+        width: '120px'
     }
+
 });
 
 class AddTaskForm extends Component {
 
     state = {
         open: false,
+        jobTitle: '',
+        jobDescription: '',
     };
-
-    getAlert() {
-        alert('getAlert from Child');
-    }
 
     handleOpen = () => {
         this.setState({ open: true });
@@ -38,6 +62,19 @@ class AddTaskForm extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
+
+    onTextInputChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+
+    onAddTaskSubmit = (event) => {
+        event.preventDefault();
+        const { jobTitle, jobDescription } = this.state;
+        this.props.onSaveNewTask(jobTitle, jobDescription);
+        this.setState({open: false});
+    }
 
     render() {
 
@@ -49,11 +86,36 @@ class AddTaskForm extends Component {
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                     open={this.state.open}
-                    onClose={this.handleClose}
-                    openModal={() => this.handleOpen()}
-                >
+                    onClose={this.handleClose}>
                     <div className={classes.paper}>
-                        <p>Modal je otvoren</p>
+                        <form method='POST' className={classes.form} onSubmit={this.onAddTaskSubmit}>
+                            <div className={classes.fields}>
+                                <TextField
+                                    id="jobTitle"
+                                    label="Job Title"
+                                    className={classes.formElement}
+                                    type="string"
+                                    name="jobTitle"
+                                    autoComplete="true"
+                                    margin="normal"
+                                    variant="outlined"
+                                    onChange={this.onTextInputChange}
+                                />
+                                <TextField
+                                    id="jobDescription"
+                                    label="Job Description"
+                                    multiline={true}
+                                    rows={4}
+                                    className={classes.textArea}
+                                    name="jobDescription"
+                                    autoComplete="false"
+                                    margin="normal"
+                                    variant="outlined"
+                                    onChange={this.onTextInputChange}
+                                />
+                                <Button type="submit" variant="contained" color="primary" className={classNames(classes.formElement, classes.button)}>Add Task</Button>
+                            </div>
+                        </form>
                     </div>
                 </Modal>
                 <Button variant="contained"
@@ -68,4 +130,11 @@ class AddTaskForm extends Component {
     }
 }
 
-export default withStyles(styles)(AddTaskForm);
+const mapDispatchToProps = dispatch => ({
+    onSaveNewTask: (jobTitle, jobDescription) => dispatch(actions.saveNewTask(jobTitle, jobDescription))
+});
+
+export default compose(
+    withStyles(styles),
+    connect(null, mapDispatchToProps)
+ )(AddTaskForm)
