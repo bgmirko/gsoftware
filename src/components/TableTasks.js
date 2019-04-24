@@ -12,7 +12,7 @@ const styles = theme => ({
     root: {
         width: '1200px',
         margin: '0 auto',
-        marginTop: theme.spacing.unit * 6,
+        marginTop: theme.spacing.unit * 1,
         overflowX: 'auto',
     },
     table: {
@@ -43,14 +43,24 @@ class TableTasks extends Component {
 
     render() {
 
-        const { classes } = this.props;
+        const { classes, tasksContainsSearchText } = this.props;
 
         let rows = [];
         let tasksLength = 0;
-        if (this.props.tasks) {
+        let tasks = [];
+
+        if(tasksContainsSearchText.length > 0){
+            console.log("prolaz 1");
+            tasks = tasksContainsSearchText;
+        }else if(this.props.tasks.length > 0){
+            console.log("prolaz 2");
+            tasks = this.props.tasks;
+        }
+
+        if (tasks) {
             const { page, rowsPerPage } = this.state;
-            tasksLength = this.props.tasks.length;
-            rows = this.props.tasks.slice((page * rowsPerPage), (page * rowsPerPage) + rowsPerPage).map(el => {
+            tasksLength = tasks.length;
+            rows = tasks.slice((page * rowsPerPage), (page * rowsPerPage) + rowsPerPage).map(el => {
                 return (
                     <TableRow
                         key={el.dbId}

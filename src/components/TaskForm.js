@@ -50,7 +50,7 @@ const styles = theme => ({
 
 });
 
-class AddTaskForm extends Component {
+class TaskForm extends Component {
 
     state = {
         jobTitle: '',
@@ -150,4 +150,4 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
     withStyles(styles),
     connect(mapStateToProps, mapDispatchToProps)
- )(AddTaskForm)
+ )(TaskForm)
