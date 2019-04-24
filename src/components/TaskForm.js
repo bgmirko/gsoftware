@@ -78,6 +78,9 @@ class TaskForm extends Component {
             if(!jobTitle) jobTitle = this.props.editTask.jobTitle;
             if(!jobDescription) jobDescription = this.props.editTask.jobDescription;
             this.props.onEditTask(this.props.editTask.dbId, this.props.editTask.id, jobTitle, jobDescription);
+            if(this.props.onTaskUpdated){
+                this.props.onTaskUpdated(jobTitle, jobDescription);
+            }  
         }
         
         this.props.onModalStateChanged();       

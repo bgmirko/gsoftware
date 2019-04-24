@@ -57,7 +57,6 @@ class ListTasksController extends Component {
         const task = this.props.tasks.find(el => {
             return el.id === id
         });
-        console.log(task);
         this.setState({ editTask: task, operation: "edit" });
         this.props.onModalStateChanged();
     }
@@ -65,7 +64,11 @@ class ListTasksController extends Component {
     onSearchInputChange = (event) => {
         const searchText = event.target.value;
         const tasksContainsSearchText = this.filterIt(this.props.tasks, searchText);
-        this.setState({ searchText: searchText, tasksContainsSearchText: tasksContainsSearchText })
+        if (tasksContainsSearchText.length > 0) {
+            this.setState({ searchText: searchText, tasksContainsSearchText: tasksContainsSearchText });
+        }else{
+            this.setState({ searchText: searchText, tasksContainsSearchText: [{dbId: 1 , empty: "empty"}] });
+        }
     }
 
     filterIt = (arr, search) => {
@@ -98,8 +101,8 @@ class ListTasksController extends Component {
                     tasksContainsSearchText={this.state.tasksContainsSearchText}
                     onEditTask={id => this.handleEditTask(id)}
                 />
-                <TaskForm editTask={this.state.editTask} 
-                        operation={this.state.operation}/>
+                <TaskForm editTask={this.state.editTask}
+                    operation={this.state.operation} />
                 <Button variant="contained"
                     color="primary"
                     onClick={this.handleNewTask}

@@ -5,8 +5,8 @@ import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../store/actions/index';
-
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from '@material-ui/core';
+
 
 const styles = theme => ({
     root: {

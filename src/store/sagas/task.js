@@ -50,6 +50,7 @@ export function* saveNewTaskSaga(action) {
     }
 }
 
+
 export function* deleteTasksSaga(action){
  
     for(let data of action.ids){
@@ -66,8 +67,6 @@ export function* deleteTasksSaga(action){
 }
 
 export function* editTaskSaga(action) {
-
-    console.log(action.dbId);
 
     const data = {
         jobTitle: action.jobTitle,

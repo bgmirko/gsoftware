@@ -74,12 +74,19 @@ class TaskDetails extends Component {
        
     }
 
+    handleTaskUpdate = (jobTitle, jobDescription) => {
+        let taskTemp = {
+            ...this.state.task,
+            jobTitle: jobTitle,
+            jobDescription: jobDescription   
+        }
+        this.setState({task: taskTemp});
+    }
+
     render() {
 
         const { task } = this.state;
         const { classes } = this.props;
-
-        console.log("render");
 
         if (task) {
             return (
@@ -111,6 +118,7 @@ class TaskDetails extends Component {
                         editTask={this.state.task} 
                         dbId={this.state.task.dbId}
                         operation="edit"
+                        onTaskUpdated={this.handleTaskUpdate}
                         />
                     <AlertDialog
                         openAlertDialog={this.state.openAlertDialog}
