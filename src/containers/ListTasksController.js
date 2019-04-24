@@ -39,7 +39,10 @@ class ListTasksController extends Component {
     }
 
     onDeleteTaskAlert = () => {
-        this.setState({ openAlertDialog: true });
+        const isSelected = this.props.tasks.find(el => el.selected === true);
+        if(isSelected){
+            this.setState({ openAlertDialog: true });
+        } 
     }
 
     onDeleteAlertAnswer = (answer) => {
