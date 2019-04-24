@@ -21,7 +21,8 @@ const styles = theme => ({
 class ListTasksController extends Component {
 
     state = {
-        open: false
+        open: false,
+        editTask: {}
     };
 
     componentDidMount() {
@@ -29,18 +30,25 @@ class ListTasksController extends Component {
     }
 
     onDeleteTask = () => {
-        console.log("delete");
         const tasksForDelete = this.props.tasks.filter(el => {
             if(el.selected) return el.dbId;
         })
         const tasksIdForDelete = tasksForDelete.map(el => {
             return el.dbId;
         });
-        console.log(tasksIdForDelete);
         this.props.onDeleteTasks(tasksIdForDelete);
     }
 
-    handleOpen = () => {
+    handleEditTask = (id) => {
+        const task = this.props.tasks.find(el => {
+            return el.id === id
+        });
+        this.setState({editTask: task});
+        this.props.onModalStateChanged();
+    }
+
+    handleNewTask = () => {
+        this.setState({editTask: null});
         this.props.onModalStateChanged();
     };
 
@@ -50,22 +58,24 @@ class ListTasksController extends Component {
 
         return (
             <Layout>
-                <TableTasks tasks={this.props.tasks} />
-                <AddTaskForm
-                />
+                <TableTasks tasks={this.props.tasks} 
+                    onEditTask = {id => this.handleEditTask(id)}
+                    />
+                <AddTaskForm editTask={this.state.editTask}/>
                 <Button variant="contained"
                     color="primary"
-                    onClick={this.handleOpen}
+                    onClick={this.handleNewTask}
                     className={classes.actionButton}
                 >
                     Add Task
                 </Button>
-                <Button variant="contained"
+                {/* <Button variant="contained"
                     color="primary"
                     className={classes.actionButton}
+                    onClick={this.onEditTask}
                 >
                     Edit Task
-                </Button>
+                </Button> */}
                 <Button variant="contained"
                     color="primary"
                     className={classes.actionButton}

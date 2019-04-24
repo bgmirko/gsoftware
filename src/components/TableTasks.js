@@ -59,12 +59,14 @@ class TableTasks extends Component {
                         <TableCell align="left">{el.jobTitle}</TableCell>
                         <TableCell align="left">{el.jobDescription}</TableCell>
                         <TableCell align="left">{el.date}</TableCell>
+                        <TableCell align="left">
+                            <button onClick={() => this.props.onEditTask(el.id)}>edit</button>
+                            <button>details</button>
+                        </TableCell>
                     </TableRow>
                 )
             })
         }
-
-
 
         return (
             <Paper className={classes.root}>
@@ -111,4 +113,4 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
     withStyles(styles),
     connect(null, mapDispatchToProps)
- )(TableTasks)
+)(TableTasks)

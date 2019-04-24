@@ -57,6 +57,8 @@ class AddTaskForm extends Component {
         jobDescription: '',
     };
 
+
+
     handleClose = () => {
         this.props.onModalStateChanged();
     };
@@ -74,6 +76,17 @@ class AddTaskForm extends Component {
         this.props.onModalStateChanged();
     }
 
+    populateData = (input) => {
+        const { editTask } = this.props;
+        if(input && editTask){
+            if(input.id === 'jobTitle'){
+                input.value = editTask.jobTitle;
+            }else if(input.id === 'jobDescription'){
+                input.value = editTask.jobDescription;
+            }  
+        }
+    }
+
     render() {
 
         const { classes, modalOpen } = this.props;
@@ -89,6 +102,7 @@ class AddTaskForm extends Component {
                         <form method='POST' className={classes.form} onSubmit={this.onAddTaskSubmit}>
                             <div className={classes.fields}>
                                 <TextField
+                                    inputRef={input => {this.populateData(input)}}
                                     id="jobTitle"
                                     label="Job Title"
                                     className={classes.formElement}
@@ -100,6 +114,7 @@ class AddTaskForm extends Component {
                                     onChange={this.onTextInputChange}
                                 />
                                 <TextField
+                                    inputRef={input => {this.populateData(input)}}
                                     id="jobDescription"
                                     label="Job Description"
                                     multiline={true}
