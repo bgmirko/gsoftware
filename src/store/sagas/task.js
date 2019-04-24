@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { put } from "redux-saga/effects";
 import * as actions from "../actions";
+import moment from 'moment';
 
 export function* fetchAllTasksSaga(action){
     try {
@@ -14,6 +15,8 @@ export function* fetchAllTasksSaga(action){
             fetshedAllTasks.push({
                 ...response.data[key],
                 selected: false,
+                dateFormated: moment(response.data[key].date).format('MM/DD/YYYY'),
+                time: moment(response.data[key].date).format("hh:mm:ss a"),
                 dbId: key
             });
         }

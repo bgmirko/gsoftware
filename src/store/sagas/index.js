@@ -12,7 +12,5 @@ export function* watchTask() {
         takeEvery(actionTypes.SAVE_NEW_TASK, saveNewTaskSaga),
         takeEvery(actionTypes.FETCH_ALL_TASKS, fetchAllTasksSaga),
         takeEvery(actionTypes.DELETE_TASKS, deleteTasksSaga)
-    //   takeEvery(actionTypes.AUTH_USER, authUserSaga),
-    //   takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga)
     ]);
-  }
+}

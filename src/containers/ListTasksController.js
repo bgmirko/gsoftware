@@ -7,6 +7,7 @@ import Layout from '../components/Layout';
 import TableTasks from '../components/TableTasks';
 import TaskForm from '../components/TaskForm';
 import * as actions from '../store/actions/index';
+import AlertDialog from '../components/AlertDialog';
 
 const styles = theme => ({
     actionButton: {
@@ -27,19 +28,28 @@ class ListTasksController extends Component {
         open: false,
         editTask: {},
         searchText: "",
-        tasksContainsSearchText: []
+        tasksContainsSearchText: [],
+        openAlertDialog: false
     };
 
     componentDidMount() {
         this.props.onFetchAllTasks();
     }
 
-    onDeleteTask = () => {
-        const tasksForDelete = this.props.tasks.filter(el => el.selected);
-        const tasksIdForDelete = tasksForDelete.map(el => {
-            return el.dbId;
-        });
-        this.props.onDeleteTasks(tasksIdForDelete);
+    onDeleteTaskAlert = () => {
+        this.setState({ openAlertDialog: true });
+        //this.props.onDeleteTasks(tasksIdForDelete);
+    }
+
+    onDeleteAlertAnswer = (answer) => {
+        if (answer) {
+            const tasksForDelete = this.props.tasks.filter(el => el.selected);
+            const tasksIdForDelete = tasksForDelete.map(el => {
+                return el.dbId;
+            });
+            this.props.onDeleteTasks(tasksIdForDelete);
+        }
+        this.setState({ openAlertDialog: false })
     }
 
     handleEditTask = (id) => {
@@ -53,7 +63,7 @@ class ListTasksController extends Component {
     onSearchInputChange = (event) => {
         const searchText = event.target.value;
         const tasksContainsSearchText = this.filterIt(this.props.tasks, searchText);
-        this.setState({ searchText: searchText, tasksContainsSearchText: tasksContainsSearchText})
+        this.setState({ searchText: searchText, tasksContainsSearchText: tasksContainsSearchText })
     }
 
     filterIt = (arr, search) => {
@@ -64,6 +74,7 @@ class ListTasksController extends Component {
         this.setState({ editTask: null });
         this.props.onModalStateChanged();
     };
+
 
     render() {
 
@@ -96,10 +107,15 @@ class ListTasksController extends Component {
                 <Button variant="contained"
                     color="primary"
                     className={classes.actionButton}
-                    onClick={this.onDeleteTask}
+                    onClick={this.onDeleteTaskAlert}
                 >
                     Delete Tasks
                 </Button>
+                <AlertDialog
+                    openAlertDialog={this.state.openAlertDialog}
+                    onAnswerSelected={this.onDeleteAlertAnswer}
+                >
+                </AlertDialog>
             </Layout>
         )
     }
@@ -123,5 +139,3 @@ export default compose(
     withStyles(styles),
     connect(mapStateToProps, mapDispatchToProps)
 )(ListTasksController)
-
-// export default connect(mapStateToProps, mapDispatchToProps)(ListTasksController);

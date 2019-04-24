@@ -20,7 +20,24 @@ const styles = theme => ({
     },
     tableRowSelected: {
         backgroundColor: "#ffe6cc !important"
-    }
+    },
+    timeColumn: {
+        width: '160px'
+    },
+    linksColumn: {
+        width: '160px'
+    },
+    linkButton: {
+        background: 'none !important',
+        border: 'none', 
+        padding: '0 !important',
+        borderBottom:'1px solid #444', 
+        cursor: 'pointer',
+        margin: '3px',
+        '&:hover': {
+            color: 'blue'
+        }
+   }
 });
 
 
@@ -49,11 +66,11 @@ class TableTasks extends Component {
         let tasksLength = 0;
         let tasks = [];
 
+        // If Search Input Text exist than show relevant tasks
+        // If Search Input not exist show all tasks
         if(tasksContainsSearchText.length > 0){
-            console.log("prolaz 1");
             tasks = tasksContainsSearchText;
         }else if(this.props.tasks.length > 0){
-            console.log("prolaz 2");
             tasks = this.props.tasks;
         }
 
@@ -69,11 +86,16 @@ class TableTasks extends Component {
                         <TableCell component="th">{el.id}</TableCell>
                         <TableCell align="left">{el.jobTitle}</TableCell>
                         <TableCell align="left">{el.jobDescription}</TableCell>
-                        <TableCell align="left">{el.date}</TableCell>
-                        <TableCell align="left">
-                            <button onClick={() => this.props.onEditTask(el.id)}>edit</button>
+                        <TableCell align="left">{el.dateFormated}</TableCell>
+                        <TableCell align="left" className={classes.timeColumn}>{el.time}</TableCell>
+                        <TableCell align="left" className={classes.linksColumn}>
+                            <button 
+                                onClick={() => this.props.onEditTask(el.id)}
+                                className={classes.linkButton}>Edit</button>
                             <Route render={({ history }) => (
-                                <button onClick={() => { history.push(`/details?id=${el.id}`) }}>details</button>
+                                <button 
+                                    onClick={() => { history.push(`/details?id=${el.id}`) }}
+                                    className={classes.linkButton}>Details</button>
                             )} />
                         </TableCell>
                     </TableRow>
@@ -89,7 +111,8 @@ class TableTasks extends Component {
                             <TableCell align="left">ID</TableCell>
                             <TableCell align="left">Job Title</TableCell>
                             <TableCell align="left">Job Description</TableCell>
-                            <TableCell align="left">Record Created (Date + Time)</TableCell>
+                            <TableCell align="left">Date</TableCell>
+                            <TableCell align="left">Time</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

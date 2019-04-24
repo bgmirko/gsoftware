@@ -20,16 +20,10 @@ const styles = theme => ({
         padding: theme.spacing.unit * 4,
         outline: 'none',
     },
-    // actionButton: {
-    //     marginTop: '30px',
-    //     marginLeft: '6px',
-    //     marginRight: '6px',
-    //     width: '140px'
-    // },
     fields: {
         display: 'flex',
         flexDirection: 'column',
-        
+
         textAlign: 'center',
         margin: '0 auto',
         marginTop: 10,
@@ -57,7 +51,12 @@ class TaskForm extends Component {
         jobDescription: '',
     };
 
-
+    componentDidUpdate() {
+        const { jobTitle, jobDescription } = this.state;
+        if (!this.props.modalOpen && (jobTitle || jobDescription)) {
+            this.setState({ jobTitle: '', jobDescription: '' });
+        }
+    }
 
     handleClose = () => {
         this.props.onModalStateChanged();
@@ -78,12 +77,12 @@ class TaskForm extends Component {
 
     populateData = (input) => {
         const { editTask } = this.props;
-        if(input && editTask){
-            if(input.id === 'jobTitle'){
+        if (input && editTask) {
+            if (input.id === 'jobTitle') {
                 input.value = editTask.jobTitle;
-            }else if(input.id === 'jobDescription'){
+            } else if (input.id === 'jobDescription') {
                 input.value = editTask.jobDescription;
-            }  
+            }
         }
     }
 
@@ -102,7 +101,7 @@ class TaskForm extends Component {
                         <form method='POST' className={classes.form} onSubmit={this.onAddTaskSubmit}>
                             <div className={classes.fields}>
                                 <TextField
-                                    inputRef={input => {this.populateData(input)}}
+                                    inputRef={input => { this.populateData(input) }}
                                     id="jobTitle"
                                     label="Job Title"
                                     className={classes.formElement}
@@ -114,7 +113,7 @@ class TaskForm extends Component {
                                     onChange={this.onTextInputChange}
                                 />
                                 <TextField
-                                    inputRef={input => {this.populateData(input)}}
+                                    inputRef={input => { this.populateData(input) }}
                                     id="jobDescription"
                                     label="Job Description"
                                     multiline={true}
@@ -150,4 +149,4 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
     withStyles(styles),
     connect(mapStateToProps, mapDispatchToProps)
- )(TaskForm)
+)(TaskForm)
