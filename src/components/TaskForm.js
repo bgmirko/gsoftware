@@ -70,9 +70,17 @@ class TaskForm extends Component {
 
     onAddTaskSubmit = (event) => {
         event.preventDefault();
-        const { jobTitle, jobDescription } = this.state;
-        this.props.onSaveNewTask(jobTitle, jobDescription);
-        this.props.onModalStateChanged();
+        let { jobTitle, jobDescription } = this.state;
+
+        if(this.props.operation === "new"){
+            this.props.onSaveNewTask(jobTitle, jobDescription);
+        }else if(this.props.operation === "edit"){
+            if(!jobTitle) jobTitle = this.props.editTask.jobTitle;
+            if(!jobDescription) jobDescription = this.props.editTask.jobDescription;
+            this.props.onEditTask(this.props.editTask.dbId, this.props.editTask.id, jobTitle, jobDescription);
+        }
+        
+        this.props.onModalStateChanged();       
     }
 
     populateData = (input) => {
@@ -125,7 +133,7 @@ class TaskForm extends Component {
                                     variant="outlined"
                                     onChange={this.onTextInputChange}
                                 />
-                                <Button type="submit" variant="contained" color="primary" className={classNames(classes.formElement, classes.button)}>Add Task</Button>
+                                <Button type="submit" variant="contained" color="primary" className={classNames(classes.formElement, classes.button)}>Save Task</Button>
                             </div>
                         </form>
                     </div>
@@ -143,6 +151,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onSaveNewTask: (jobTitle, jobDescription) => dispatch(actions.saveNewTask(jobTitle, jobDescription)),
+    onEditTask: (dbId, id, jobTitle, jobDescription) => dispatch(actions.editTask(dbId, id, jobTitle, jobDescription)),
     onModalStateChanged: () => dispatch(actions.modalStateChanged())
 });
 

@@ -15,7 +15,7 @@ const fetchAllTasksSuccess = (state, action) => {
 
 const updateTasksData = (state, action) => {
     const tasks = state.tasks.map(el => {
-        if (el.id.toString() === action.id) {
+        if (el.id && el.id.toString() === action.id) {
             el.selected = !el.selected;
             return el;
         } else {

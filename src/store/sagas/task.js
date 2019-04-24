@@ -65,3 +65,21 @@ export function* deleteTasksSaga(action){
     yield put(actions.fetchAllTasks());
 }
 
+export function* editTaskSaga(action) {
+
+    console.log(action.dbId);
+
+    const data = {
+        jobTitle: action.jobTitle,
+        jobDescription: action.jobDescription,
+        date: new Date(),
+        id: action.id
+    }
+
+    try {
+        yield axios.put(`https://qsoftware-task.firebaseio.com/task/${action.dbId}.json`, data);
+        yield put(actions.fetchAllTasks());
+    } catch (error) {
+        console.log(error);
+    }
+}

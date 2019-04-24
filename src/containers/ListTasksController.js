@@ -17,7 +17,8 @@ const styles = theme => ({
         width: '140px'
     },
     formElement: {
-        marginTop: '50px'
+        marginTop: '50px',
+        width: '250px'
     }
 });
 
@@ -29,7 +30,8 @@ class ListTasksController extends Component {
         editTask: {},
         searchText: "",
         tasksContainsSearchText: [],
-        openAlertDialog: false
+        openAlertDialog: false,
+        operation: ""
     };
 
     componentDidMount() {
@@ -38,7 +40,6 @@ class ListTasksController extends Component {
 
     onDeleteTaskAlert = () => {
         this.setState({ openAlertDialog: true });
-        //this.props.onDeleteTasks(tasksIdForDelete);
     }
 
     onDeleteAlertAnswer = (answer) => {
@@ -56,7 +57,8 @@ class ListTasksController extends Component {
         const task = this.props.tasks.find(el => {
             return el.id === id
         });
-        this.setState({ editTask: task });
+        console.log(task);
+        this.setState({ editTask: task, operation: "edit" });
         this.props.onModalStateChanged();
     }
 
@@ -71,7 +73,7 @@ class ListTasksController extends Component {
     }
 
     handleNewTask = () => {
-        this.setState({ editTask: null });
+        this.setState({ editTask: null, operation: "new" });
         this.props.onModalStateChanged();
     };
 
@@ -96,7 +98,8 @@ class ListTasksController extends Component {
                     tasksContainsSearchText={this.state.tasksContainsSearchText}
                     onEditTask={id => this.handleEditTask(id)}
                 />
-                <TaskForm editTask={this.state.editTask} />
+                <TaskForm editTask={this.state.editTask} 
+                        operation={this.state.operation}/>
                 <Button variant="contained"
                     color="primary"
                     onClick={this.handleNewTask}
@@ -113,8 +116,7 @@ class ListTasksController extends Component {
                 </Button>
                 <AlertDialog
                     openAlertDialog={this.state.openAlertDialog}
-                    onAnswerSelected={this.onDeleteAlertAnswer}
-                >
+                    onAnswerSelected={this.onDeleteAlertAnswer}>
                 </AlertDialog>
             </Layout>
         )

@@ -34,6 +34,16 @@ export const deleteTasks = (ids) => {
     }
 }
 
+export const editTask = (dbId, id, jobTitle, jobDescription) => {
+    return{
+        type: actionTypes.EDIT_TASKS,
+        dbId: dbId,
+        id: id,
+        jobTitle: jobTitle,
+        jobDescription: jobDescription
+    }
+}
+
 export const tableRowClicked = (id) => {
     return{
         type: actionTypes.TABLE_ROW_CLICKED,
