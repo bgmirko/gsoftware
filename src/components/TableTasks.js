@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
+import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../store/actions/index';
@@ -61,7 +62,9 @@ class TableTasks extends Component {
                         <TableCell align="left">{el.date}</TableCell>
                         <TableCell align="left">
                             <button onClick={() => this.props.onEditTask(el.id)}>edit</button>
-                            <button>details</button>
+                            <Route render={({ history }) => (
+                                <button onClick={() => { history.push(`/details?id=${el.id}`) }}>details</button>
+                            )} />
                         </TableCell>
                     </TableRow>
                 )

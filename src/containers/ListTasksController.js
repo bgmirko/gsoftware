@@ -69,13 +69,6 @@ class ListTasksController extends Component {
                 >
                     Add Task
                 </Button>
-                {/* <Button variant="contained"
-                    color="primary"
-                    className={classes.actionButton}
-                    onClick={this.onEditTask}
-                >
-                    Edit Task
-                </Button> */}
                 <Button variant="contained"
                     color="primary"
                     className={classes.actionButton}
